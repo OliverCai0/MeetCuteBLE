@@ -33,8 +33,16 @@ const HomeScreen = () => {
       <View style={[styles.container, {width: '90%'}]}>
         <ImageBackground 
           resizeMode='cover'
-          style={{width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'blue'}} source={require('../assets/background1.jpg')}>
-          <Text style={{fontSize: '50%', fontFamily: 'HelveticaNeue-Bold'}}>Welcome Back</Text>
+          imageStyle={{ borderRadius: 15,borderColor: 'black',
+          borderWidth: 2,}}
+          style={{width: '100%', 
+                  flex: 1, 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                   }} 
+            source={require('../assets/background1.jpg')}
+            >
+          <Text style={{fontSize: '50%', fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Welcome Back</Text>
         </ImageBackground>
         <View style={{flex: 4}}>
         <KeyboardAvoidingView>
