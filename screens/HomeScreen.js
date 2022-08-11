@@ -45,36 +45,46 @@ const HomeScreen = () => {
                    }} 
             source={require('../assets/background1.jpg')}
             > */}
-          <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Welcome</Text>
-          <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Back!</Text>
+        <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Welcome</Text>
+        <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Back!</Text>
         {/* </ImageBackground> */}
-        <View style={{flex: 4}}>
-        <KeyboardAvoidingView>
-          <Text>Username: Oliver</Text>
-          <Text>BLE String: 123456</Text>
+        <View style={{flex: 4, width: '100%', justifyContent: 'center', flexDirection: 'column'}}>
+        <KeyboardAvoidingView style={[styles.container, {width: '100%'}]}>
+          <View style={[ {backgroundColor: '#CBF3F9', width: '90%', height: '25%', borderRadius: 15, justifyContent: 'center', padding: 10, borderColor: 'black', borderWidth: 2}]}>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>Username: Oliver</Text>
+          </View>
+          <View style={{height: 10}}></View>
+          <View style={[ {backgroundColor: '#CBF3F9', width: '90%', height: '25%', borderRadius: 15, justifyContent: 'center', padding: 10, borderColor: 'black', borderWidth: 2}]}>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>BLE String: 123456</Text>
+          </View>
         </KeyboardAvoidingView>
         </View>
         <View style={{flex: 1}}>
         </View>
       </View>
-      <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', width: '100%'}]}>
+      <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', width: '100%',flex: 0, height: '30%'}]}>
         <TouchableOpacity style={{alignItems: 'center', 
                                   justifyContent: 'center', 
                                   backgroundColor: '#ADD8E6', 
-                                  width: '40%', borderRadius: 15, aspectRatio: 1}}
+                                  width: '40%', borderRadius: 15, aspectRatio: 1, borderColor: 'black', borderWidth: 2}}
                           onPress={() => goToBLETable()}>
           <View style={{backgroundColor: 'white', borderRadius: 15, width: '50%', alignItems: 'center', aspectRatio: 1, justifyContent: 'center'}}>
             <FontAwesome name="bluetooth" size={50} color='#ADD8E6' />
           </View>
           <Text style={{color: 'black', fontFamily: 'Helvetica-Light', padding: 20}}>Find People</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFD580', width: '40%', borderRadius: 15, aspectRatio: 1}}>
+        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFD580', width: '40%', borderRadius: 15, aspectRatio: 1, borderColor: 'black', borderWidth: 2}}>
           <View style={{backgroundColor: 'white', borderRadius: 15, width: '50%', alignItems: 'center', aspectRatio: 1, justifyContent: 'center'}}>
           <Ionicons name="chatbubble" size={50} color='#FFD580' />
           </View>
           <Text style={{color: 'black', fontFamily: 'Helvetica-Light', padding: 20}}>Chat with Friends</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity 
+      onPress={() => handleSignOut()}
+      style={{backgroundColor: '#BD5A54', width: '50%', height: '7%', borderRadius: 15, borderColor: 'black', borderWidth: 2, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Light'}}>Sign Out</Text>
+      </TouchableOpacity>
     </SafeAreaView>
     // <View style={styles.container}>
     //   <Profile></Profile>
