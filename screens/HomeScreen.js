@@ -11,7 +11,10 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 const HomeScreen = () => {
   const navgiation = useNavigation()
   const [nameString, setNameString] = useState('')
-  
+
+  const goToBLETable = () => {
+    navgiation.navigate("BLE");
+  }
 
   const goToAboutSettings = () => {
     if(Device.osName != 'Android'){
@@ -31,7 +34,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.container, {width: '90%'}]}>
-        <ImageBackground 
+        {/* <ImageBackground 
           resizeMode='cover'
           imageStyle={{ borderRadius: 15,borderColor: 'black',
           borderWidth: 2,}}
@@ -41,9 +44,10 @@ const HomeScreen = () => {
                   justifyContent: 'center',
                    }} 
             source={require('../assets/background1.jpg')}
-            >
-          <Text style={{fontSize: '50%', fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Welcome Back</Text>
-        </ImageBackground>
+            > */}
+          <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Welcome</Text>
+          <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold', color: 'black'}}>Back!</Text>
+        {/* </ImageBackground> */}
         <View style={{flex: 4}}>
         <KeyboardAvoidingView>
           <Text>Username: Oliver</Text>
@@ -57,7 +61,8 @@ const HomeScreen = () => {
         <TouchableOpacity style={{alignItems: 'center', 
                                   justifyContent: 'center', 
                                   backgroundColor: '#ADD8E6', 
-                                  width: '40%', borderRadius: 15, aspectRatio: 1}}>
+                                  width: '40%', borderRadius: 15, aspectRatio: 1}}
+                          onPress={() => goToBLETable()}>
           <View style={{backgroundColor: 'white', borderRadius: 15, width: '50%', alignItems: 'center', aspectRatio: 1, justifyContent: 'center'}}>
             <FontAwesome name="bluetooth" size={50} color='#ADD8E6' />
           </View>

@@ -83,7 +83,7 @@ const LoginScreen = () => {
                   justifyContent: 'space-evenly',
                   flex: 2,
                   }]}>
-      <Text style={{fontSize: '50%', fontFamily: 'HelveticaNeue-Bold'}}> Sign Up</Text>
+      <Text style={{fontSize: 50, fontFamily: 'HelveticaNeue-Bold'}}> Sign Up</Text>
         <Image 
             source={require('../assets/bluetooth.png')}
             style={{width: '25%', resizeMode: 'contain'}}/>
