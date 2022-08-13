@@ -3,40 +3,35 @@ import React, { useEffect, useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import { manager } from '../ble';
-
+import { useSelector } from 'react-redux';
 
 const BLETable = () => {
+    const deviceList = useSelector((state) => state.deviceList);
     const colors = [
         '#D9E3DA',
         '#D1CFC0',
         '#C2C2B4',
         '#ECC9C7',
     ]
-    const devices = useRef([]);
     const interval = useRef(0);
-    const [deviceList, setDeviceList] = useState([
-        {name: "Oliver's iPhone", id: 0, pressed: false}, {name: "Adam's iPad", id: 1, pressed: false}
-    ]);
+    // const [deviceList, setDeviceList] = useState([
+    //     {name: "Oliver's iPhone", id: 0, pressed: false}, {name: "Adam's iPad", id: 1, pressed: false}
+    // ]);
     const navigation = useNavigation();
 
     async function scanBLE() {
-        manager.startDeviceScan(null, null, (e, d) => {
-            if(d && d.localName){
-                if (!devices.current.includes(d.localName)){
-                    devices.current.push({name: d.localName, id: devices.length, pressed: false})
-                }
-                console.log(d.localName);
+        manager.startDeviceScan(null, null, (e,d) => {
+            if(d && d.localName && !deviceList.map(x => x.name).includes(d.localName)){
+                // setDeviceList((prevState) => [...prevState, {name: d.localName, id: prevState.length, pressed: false}])
             }
+            console.log('Running')
         })
-        await new Promise(r => setTimeout(r, 2000));
-        manager.stopDeviceScan();
-        console.log(devices);
     }
-
+ 
     const generateName = (x) => {
         return(
         <TouchableOpacity style={{flex: 1, width: '100%', 
-                            backgroundColor: x.item.pressed ? '#F1E3BF' : '#85A98F', 
+                            backgroundColor: x.item.pressed ? '#85A98F' : 'white', 
                             height: 50, 
                             borderRadius: 15, 
                             justifyContent: 'center', 
@@ -59,19 +54,9 @@ const BLETable = () => {
         )
     }
 
-    useEffect(() => {
-        // scanBLE().then(() =>{
-        //     console.log('Devices', devices.current);
-        //     setDeviceList(devices.current);
-        // })
-            interval.current = setInterval( () => {
-                scanBLE().then(() =>{
-                    console.log('Devices', devices.current);
-                    setDeviceList(devices.current);
-                })
-            }, 2000
-        )
-    }, []);
+    // useEffect(() => {
+    //     scanBLE();
+    // })
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -84,8 +69,18 @@ const BLETable = () => {
             <AntDesign name="back" size={24} color="black" />
         </TouchableOpacity>
         <View style={[styles.container, {width: '100%'}]}>
-            <View>
-                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: 20}}> Devices </Text>
+            <View style={{paddingBottom: 10, }}>
+                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: 20}}> Devices Around Me</Text>
+            </View>
+            <FlatList
+                style={{width: '100%', padding: 10}}
+                data={deviceList}
+                renderItem={generateName}
+                ItemSeparatorComponent={() => (<View style={{height: 10}}></View>)}
+                keyExtractor={(item) => item.id}
+            />
+            <View style={{padding: 10, }}>
+                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: 20}}> BLE Meet Users </Text>
             </View>
             <FlatList
                 style={{width: '100%', padding: 10}}

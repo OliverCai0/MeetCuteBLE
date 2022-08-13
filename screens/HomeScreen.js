@@ -7,10 +7,15 @@ import Profile from './Profile'
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'; 
+import { useEffect } from 'react'
+import { manager } from '../ble'
+import { useDispatch, useSelector } from 'react-redux';
+import { getDeviceList, setDeviceList } from '../redux/ducks/DeviceList'
 
 const HomeScreen = () => {
-  const navgiation = useNavigation()
-  const [nameString, setNameString] = useState('')
+  const dispatch = useDispatch();
+  const navgiation = useNavigation();
+  const [nameString, setNameString] = useState('');
 
   const goToBLETable = () => {
     navgiation.navigate("BLE");
@@ -30,6 +35,10 @@ const HomeScreen = () => {
     })
     .catch(error => alert(error.message))
   }
+
+  useEffect(() => {
+    dispatch(getDeviceList({}))
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>

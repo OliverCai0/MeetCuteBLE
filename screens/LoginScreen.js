@@ -33,7 +33,8 @@ const LoginScreen = () => {
       .then((userCredential) => {
           // Signed in 
           setDoc(doc(firestore, 'users', userCredential.user.email), {
-            username: username
+            username: username,
+            bleID: Math.random().toString().slice(2,15)
           }).then(() => {
               const user = userCredential.user;
               console.log(userCredential);
