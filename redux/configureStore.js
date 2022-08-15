@@ -1,20 +1,20 @@
 import { configureStore, combineReducers} from "@reduxjs/toolkit";
 import userReducer from "./ducks/User"
 import contactsReducer from "./ducks/Contacts";
-import incomingRequestsReducer from "./ducks/IncomingRequests";
-import outgoingRequestsReducer from "./ducks/OutgoingRequests";
 import deviceListReducer from "./ducks/DeviceList";
 import { watcherSaga } from "./sagas/rootSaga";
 import createSagaMiddleware from "@redux-saga/core";
+import blocksReducer from "./ducks/Blocks";
+import keysReducer from "./ducks/Keys"
 
 const sagaMiddleware = createSagaMiddleware();
 
 const reducer = combineReducers({
     user: userReducer,
     contacts : contactsReducer,
-    incomingRequests : incomingRequestsReducer,
-    outgoingRequests : outgoingRequestsReducer,
-    deviceList : deviceListReducer
+    deviceList : deviceListReducer,
+    blocks : blocksReducer,
+    keys : keysReducer
 });
 
 const store = configureStore({

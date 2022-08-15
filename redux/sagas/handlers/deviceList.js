@@ -1,4 +1,4 @@
-import { take, put, call } from 'redux-saga/effects'
+import { take, put, call, cancelled } from 'redux-saga/effects'
 import { eventChannel, END } from 'redux-saga'
 import { setDeviceList } from "../../ducks/DeviceList";
 import { BleManager } from 'react-native-ble-plx';
@@ -6,13 +6,12 @@ import { manager } from '../../../ble'
 
 function scanBLE() {
     return eventChannel(emitter => {
-        // const manager = new BleManager();
+        // const manager = new BlesManager();
         manager.startDeviceScan(null, null, (e,d) => {
             if(d && d.localName){
-                console.log("Emitter" ,d.localName)
+                console.log("Emitter" , d.localName)
                 emitter(d)
             }
-            console.log('Emitting')
         })
         return () => {
             console.log('Stop')
@@ -27,13 +26,20 @@ export function* deviceListSaga() {
     try {    
         while (true) {
             // take(END) will cause the saga to terminate by jumping to the finally block
-            console.log('entered Block')
+            // console.log('entered Block')
             let d = yield take(chan)
             console.log("name: ", d.localName)
-            put(setDeviceList(d))
+            const data = {
+                localName : d.localName,
+                id : d.id
+            }
+            yield put(setDeviceList(data))
 
         }
     } finally {
-        console.log('terminated')
+        if (yield cancelled()){
+            chan.close()
+            console.log('terminated')
+        }
     }
 }

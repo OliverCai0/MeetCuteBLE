@@ -10,11 +10,19 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useEffect } from 'react'
 import { manager } from '../ble'
 import { useDispatch, useSelector } from 'react-redux';
-import { getDeviceList, setDeviceList } from '../redux/ducks/DeviceList'
+import { getDeviceList, setDeviceList, stopDeviceListen } from '../redux/ducks/DeviceList'
+import { loginUser, resetUserData, setUser } from '../redux/ducks/User'
+import { useNetInfo } from '@react-native-community/netinfo'
+import { storage } from '../mmkv'
+import fetchKeyInfo from '../redux/sagas/handlers/keys'
+import { closeKeyChannel, getKeys } from '../redux/ducks/Keys'
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+  const netinfo = useNetInfo();
   const navgiation = useNavigation();
+  const user = useSelector((state) => state.user);
+  const keys = useSelector((state) => state.keys);
   const [nameString, setNameString] = useState('');
 
   const goToBLETable = () => {
@@ -31,13 +39,28 @@ const HomeScreen = () => {
   }
   const handleSignOut = () => {
     signOut(authentication).then(() => {
+        dispatch(stopDeviceListen({}))
+        dispatch(closeKeyChannel({}))
         navgiation.replace("Login")
     })
     .catch(error => alert(error.message))
   }
 
   useEffect(() => {
-    dispatch(getDeviceList({}))
+    console.log('keys', keys)
+    dispatch(getDeviceList())
+    if(keys.length == 0){
+      dispatch(getKeys())
+    }
+
+    if (Object.keys(user) == 0){
+      if (netinfo.isConnected){
+        dispatch(loginUser({id : authentication.currentUser.uid}))
+      }
+      else{
+        dispatch(resetUserData())
+      }
+    }
   }, [])
 
   return (
@@ -60,12 +83,15 @@ const HomeScreen = () => {
         <View style={{flex: 4, width: '100%', justifyContent: 'center', flexDirection: 'column'}}>
         <KeyboardAvoidingView style={[styles.container, {width: '100%'}]}>
           <View style={[ {backgroundColor: '#CBF3F9', width: '90%', height: '25%', borderRadius: 15, justifyContent: 'center', padding: 10, borderColor: 'black', borderWidth: 2}]}>
-            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>Username: Oliver</Text>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>{user.username}</Text>
           </View>
           <View style={{height: 10}}></View>
           <View style={[ {backgroundColor: '#CBF3F9', width: '90%', height: '25%', borderRadius: 15, justifyContent: 'center', padding: 10, borderColor: 'black', borderWidth: 2}]}>
-            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>BLE String: 123456</Text>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>BLE Identifier: {user.uuid}</Text>
           </View>
+          <TouchableOpacity style={[ {backgroundColor: '#CBF3F9', width: '90%', height: '25%', borderRadius: 15, justifyContent: 'center', padding: 10, borderColor: 'black', borderWidth: 2}]}>
+            <Text style={{color: 'black', fontFamily: 'Helvetica-Bold',}}>BLE Identifier: {user.uuid}</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
         </View>
         <View style={{flex: 1}}>

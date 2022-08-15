@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { storage } from "../../mmkv";
 
 const userSlice = createSlice({
     name: "user",
@@ -7,11 +8,19 @@ const userSlice = createSlice({
         getUser() {},
         setUser(state, action) {
             const userData = action.payload;
-            return { ...state, ...userData};
-        }
+            console.log("Setting user data:", userData)
+            storage.set('user', JSON.stringify(userData))
+            return {...state, ...userData};
+        },
+        loginUser() {},
+        registerUser() {},
+        logoutUser(state, action) {
+            return {}
+        },
+        resetUserData() {}
     }
 });
 
-export const {getUser, setUser} = userSlice.actions;
+export const {getUser, setUser, loginUser, registerUser, logoutUser, resetUserData} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -5,8 +5,12 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { useNavigation } from '@react-navigation/native';
 import { setDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, loginUser, registerUser, setUser } from '../redux/ducks/User';
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -23,8 +27,12 @@ const LoginScreen = () => {
         }
     })
 
-    return unsubscribe
+    // return unsubscribe
+    // if (Object.keys(user).length != 0){
+    //   navigation.replace("Home")
+    // }
   }, [])
+
 
   const handleSignUp = () => {
     setLoading(true);
@@ -32,14 +40,16 @@ const LoginScreen = () => {
       createUserWithEmailAndPassword(authentication, email, password)
       .then((userCredential) => {
           // Signed in 
-          setDoc(doc(firestore, 'users', userCredential.user.email), {
-            username: username,
-            bleID: Math.random().toString().slice(2,15)
-          }).then(() => {
-              const user = userCredential.user;
-              console.log(userCredential);
-            })
-          
+          // setDoc(doc(firestore, 'users', userCredential.user.email), {
+          //   username: username,
+          //   bleID: Math.random().toString().slice(2,15)
+          // }).then(() => {
+          //     const user = userCredential.user;
+          //     console.log(userCredential);
+          //   })
+          const userContext = userCredential.user;
+          console.log(userContext)
+          dispatch(registerUser({username: username, id: userContext.uid, email: email}));
           // ...
         })
         .catch((error) => {
@@ -60,8 +70,9 @@ const LoginScreen = () => {
         setLoading(true);
         signInWithEmailAndPassword(authentication, email, password)
         .then((userCredential) => {
-            // Logged in 
-            const user = userCredential.user;
+            // Logged in
+            const userContext = userCredential.user;
+            dispatch(loginUser({id : userContext.uid})); 
             console.log(userCredential);
             // ...
           })

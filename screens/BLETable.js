@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 const BLETable = () => {
     const deviceList = useSelector((state) => state.deviceList);
+    const allUsers = useSelector((state) => state.keys)
     const colors = [
         '#D9E3DA',
         '#D1CFC0',
@@ -43,20 +44,19 @@ const BLETable = () => {
                                     console.log(x.item.id);
                                     temp = deviceList.slice();
                                     temp[x.item.id].pressed = !x.item.pressed
-                                    setDeviceList(temp);
                                 }}>
             <Text 
             style={{fontFamily: 'Helvetica-Light'}}
             >
-                {x.item.name}
+                {x.item.local_name}
             </Text>
         </TouchableOpacity>
         )
     }
 
-    // useEffect(() => {
-    //     scanBLE();
-    // })
+    useEffect(() => {
+        console.log('users', allUsers)
+    })
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -84,7 +84,7 @@ const BLETable = () => {
             </View>
             <FlatList
                 style={{width: '100%', padding: 10}}
-                data={deviceList}
+                data={deviceList.filter((d) =>  allUsers.includes(d.local_name))}
                 renderItem={generateName}
                 ItemSeparatorComponent={() => (<View style={{height: 10}}></View>)}
                 keyExtractor={(item) => item.id}
