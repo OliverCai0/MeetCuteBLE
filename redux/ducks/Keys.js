@@ -7,7 +7,6 @@ const keysSlice = createSlice({
     reducers: {
         getKeys() {},
         setKeys(state, action) {
-            console.log('payload', action.payload)
             const updates = action.payload.filter(x => !state.includes(x))
             storage.set('allUsers', 
                 JSON.stringify(

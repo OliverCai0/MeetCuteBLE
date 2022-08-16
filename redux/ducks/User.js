@@ -8,7 +8,6 @@ const userSlice = createSlice({
         getUser() {},
         setUser(state, action) {
             const userData = action.payload;
-            console.log("Setting user data:", userData)
             storage.set('user', JSON.stringify(userData))
             return {...state, ...userData};
         },
@@ -17,10 +16,16 @@ const userSlice = createSlice({
         logoutUser(state, action) {
             return {}
         },
-        resetUserData() {}
+        resetUserData() {},
+        addUserContact(state, action) {
+            const newContact = action.payload.newContact.local_name
+            console.log('New Onact!', newContact)
+            return {...state, contacts : [...state.contacts, newContact]}
+        },
+        addUserBlock() {}
     }
 });
 
-export const {getUser, setUser, loginUser, registerUser, logoutUser, resetUserData} = userSlice.actions;
+export const {addUserContact, addUserBlock, getUser, setUser, loginUser, registerUser, logoutUser, resetUserData} = userSlice.actions;
 
 export default userSlice.reducer;

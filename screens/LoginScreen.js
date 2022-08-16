@@ -39,30 +39,20 @@ const LoginScreen = () => {
     if (username){
       createUserWithEmailAndPassword(authentication, email, password)
       .then((userCredential) => {
-          // Signed in 
-          // setDoc(doc(firestore, 'users', userCredential.user.email), {
-          //   username: username,
-          //   bleID: Math.random().toString().slice(2,15)
-          // }).then(() => {
-          //     const user = userCredential.user;
-          //     console.log(userCredential);
-          //   })
           const userContext = userCredential.user;
-          console.log(userContext)
           dispatch(registerUser({username: username, id: userContext.uid, email: email}));
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          // console.log(errorCode);
           console.log(errorMessage);
         });
         setLoading(false);
     }
     else{
-      console.log('no username provided')
       setError('No username provided');
+      setLoading(false);
     }
   }
 

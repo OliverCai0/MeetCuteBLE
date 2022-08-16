@@ -47,7 +47,6 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    console.log('keys', keys)
     dispatch(getDeviceList())
     if(keys.length == 0){
       dispatch(getKeys())

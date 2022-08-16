@@ -3,11 +3,16 @@ import React, { useEffect, useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import { manager } from '../ble';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewContact } from '../redux/sagas/requests/user';
+import { addUserContact } from '../redux/ducks/User';
 
 const BLETable = () => {
+    const dispatch = useDispatch()
+    const user = useSelector((state) => state.user)
     const deviceList = useSelector((state) => state.deviceList);
     const allUsers = useSelector((state) => state.keys)
+    const [pressed, setPressed] = useState('')
     const colors = [
         '#D9E3DA',
         '#D1CFC0',
@@ -25,14 +30,13 @@ const BLETable = () => {
             if(d && d.localName && !deviceList.map(x => x.name).includes(d.localName)){
                 // setDeviceList((prevState) => [...prevState, {name: d.localName, id: prevState.length, pressed: false}])
             }
-            console.log('Running')
         })
     }
  
     const generateName = (x) => {
         return(
         <TouchableOpacity style={{flex: 1, width: '100%', 
-                            backgroundColor: x.item.pressed ? '#85A98F' : 'white', 
+                            backgroundColor: x.item.local_name == pressed ? '#85A98F' : 'white', 
                             height: 50, 
                             borderRadius: 15, 
                             justifyContent: 'center', 
@@ -41,9 +45,13 @@ const BLETable = () => {
                             borderWidth: 2}}
                             onPress={() => 
                                 {
-                                    console.log(x.item.id);
-                                    temp = deviceList.slice();
-                                    temp[x.item.id].pressed = !x.item.pressed
+                                    if (pressed === x.item.local_name){
+                                        setPressed('')
+                                    }
+                                    else{
+                                        setPressed(x.item.local_name)
+                                    }
+                                    console.log(pressed)
                                 }}>
             <Text 
             style={{fontFamily: 'Helvetica-Light'}}
@@ -53,10 +61,6 @@ const BLETable = () => {
         </TouchableOpacity>
         )
     }
-
-    useEffect(() => {
-        console.log('users', allUsers)
-    })
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -98,7 +102,14 @@ const BLETable = () => {
                     </Text>
                 </View>
             )} */}
-            <TouchableOpacity style={{backgroundColor: '#03577A', width: '50%', height: '5%', borderRadius: 15, justifyContent: 'center', alignItems: 'center'}}>
+            <TouchableOpacity style={{backgroundColor: '#03577A', width: '50%', height: '5%', borderRadius: 15, justifyContent: 'center', alignItems: 'center'}}
+                              onPress={() => {
+                                if(pressed != ''){
+                                    const index = deviceList.findIndex((x) => x.local_name === pressed)
+                                    dispatch(addUserContact({user : user, newContact : deviceList[index]}));
+                                }
+                              }}
+            >
                 <Text style={{color: 'white', fontFamily: 'Helvetica-Bold',}}>Send</Text>
             </TouchableOpacity>
         </View>

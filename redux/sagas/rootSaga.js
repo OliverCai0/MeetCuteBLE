@@ -1,8 +1,7 @@
-import { take, cancel, fork, takeLatest, cancelled, takeEvery, put, call } from 'redux-saga/effects'
+import { take, cancel, fork, put } from 'redux-saga/effects'
 import { deviceListSaga } from './handlers/deviceList'
-import { getDeviceList, setDeviceList, stopDeviceListen } from '../ducks/DeviceList'
-import { loginUser, logoutUser, registerUser, setUser } from '../ducks/User'
-import { getUserData, signUpUser} from './requests/user';
+import { getDeviceList, stopDeviceListen } from '../ducks/DeviceList'
+import { logoutUser} from '../ducks/User'
 import getUserCredit from './handlers/user';
 import fetchKeyInfo, { listenUpdatesToUsers } from './handlers/keys';
 import { closeKeyChannel } from '../ducks/Keys';

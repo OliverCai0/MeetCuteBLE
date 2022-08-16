@@ -1,6 +1,15 @@
 import { firestore } from "../../../firebase";
-import { query, collection, setDoc, doc, getDoc, getDocs } from "firebase/firestore";
+import { query, collection, setDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import deviceInfoModule from "react-native-device-info";
+
+export function addNewContact(action){
+    newContact = action.payload.newContact.local_name
+    console.log('contact', newContact)
+    return updateDoc(doc(firestore, 'users', action.payload.user.uuid), {
+        contacts : [...action.user.contacts, newContact]
+    })
+    .catch((error) => console.log(error))
+}
 
 export function signUpUser(action) {
     const userId = action.payload.id
@@ -8,7 +17,6 @@ export function signUpUser(action) {
     const email = action.payload.email
     return deviceInfoModule.getUniqueId()
         .then((uniqueID) => {
-            console.log('Unique ID:', uniqueID);
             return setDoc(doc(firestore, 'users', userId), {
                 email: email,
                 username: username,
@@ -36,7 +44,6 @@ export function getUserData(action) {
     return getDoc(doc(firestore, 'users', action.payload.id ))
     .then((response) => {
         if (response.exists()){
-            console.log("Response exists")
             return response.data()
         } else {
             console.log('User does not exist')
@@ -48,7 +55,6 @@ export function getUserData(action) {
 export function grabAllUsers(action) {
     return getDocs(query(collection(firestore, 'users')))
     .then((response) => {
-        console.log('grabbed', response.docs[0])
         return response.docs.map((doc) => doc.data())
     })
 }

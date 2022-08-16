@@ -8,7 +8,6 @@ import { grabAllUsers } from "../requests/user";
 function userChannel(){
     return eventChannel(emitter => {
         const unsub = onSnapshot(collection(firestore,'users'), (query) =>{
-            console.log('query from chanel', query)
             emitter(query.docs.map((doc) => doc.data()))
         })
         return () => {
@@ -22,13 +21,11 @@ export function* listenUpdatesToUsers() {
     try{
         while(true){
             let r = yield take(chan)
-            console.log('New Update: ', r.map((x) => x.uuid))
             yield put(setKeys(r.map((x) => x.uuid)))
         }
     } finally{
         if (yield(cancelled())){
             chan.close()
-            console.log('terminated')
         }
     }
 }
@@ -36,7 +33,6 @@ export function* listenUpdatesToUsers() {
 function* storeAllUserData(action) {
     try{
       const response = yield call(grabAllUsers, action)
-      console.log('response for keys', response)
       yield put(setKeys(response.map((x) => x.uuid)))
     }catch(error){
       console.log("storeAllUserData error:", error)

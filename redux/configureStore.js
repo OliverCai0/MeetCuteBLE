@@ -6,15 +6,16 @@ import { watcherSaga } from "./sagas/rootSaga";
 import createSagaMiddleware from "@redux-saga/core";
 import blocksReducer from "./ducks/Blocks";
 import keysReducer from "./ducks/Keys"
+import chatsReducer from "./ducks/Chat";
 
 const sagaMiddleware = createSagaMiddleware();
 
 const reducer = combineReducers({
     user: userReducer,
-    contacts : contactsReducer,
     deviceList : deviceListReducer,
     blocks : blocksReducer,
-    keys : keysReducer
+    keys : keysReducer,
+    chats : chatsReducer
 });
 
 const store = configureStore({
