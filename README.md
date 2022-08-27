@@ -1,4 +1,4 @@
-# MeetCuteBLE
+# MeetCuteBLE (WIP)
 Meet and message nearby people (or avoid them) with bluetooth.
 
 ## How it works:
